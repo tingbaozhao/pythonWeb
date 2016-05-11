@@ -2,6 +2,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import resolve
 from django.http import HttpRequest
+from django.template.loader import render_to_string
 
 from lists.views import home_page
 
@@ -21,5 +22,8 @@ class HomePageTest(TestCase):
     def test_homepage_view_content(self):
         request = HttpRequest()
         response = home_page(request)
-        self.assertTrue(response.content.startswith("<html>"))
+        self.assertTrue(response.content.find("<html>"))
         self.assertTrue(response.content.endswith("</html>"))
+        expect_html = render_to_string('home.html')
+        print type(expect_html)
+        self.assertEqual(response.content.decode("utf-8"), expect_html)
